@@ -1,0 +1,6 @@
+@WDC_F24_HostAddress = http://amr10120-001-site1.anytempurl.com/
+
+GET {{WDC_F24_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

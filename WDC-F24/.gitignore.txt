@@ -1,0 +1,10 @@
+# Ignore build output and VS temp files
+bin/
+obj/
+.vs/
+*.user
+*.suo
+*.dbmdl
+*.log
+*.pdb
+*.DotSettings.user
