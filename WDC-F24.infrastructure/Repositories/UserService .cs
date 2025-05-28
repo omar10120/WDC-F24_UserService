@@ -55,9 +55,10 @@ namespace WDC_F24.infrastructure.Repositories
 
                 try
                 {
-                    _publisher.Publish("Users-received", new
+                    _publisher.Publish("users-received", new
                     {
-                        user = user
+                        user = user  ,
+                        Message = $"Users was received successfully"
                     });
                 }
                 catch (Exception pubEx)
@@ -92,9 +93,10 @@ namespace WDC_F24.infrastructure.Repositories
 
                 try
                 {
-                    _publisher.Publish("User-received", new
+                    _publisher.Publish("user-received", new
                     {
-                        user = user
+                        user = user ,
+                        Message = $"User was received successfully"
                     });
                 }
                 catch (Exception pubEx)
@@ -134,7 +136,8 @@ namespace WDC_F24.infrastructure.Repositories
                     {
                         Id = user.Id,
                         Username = user.UserName,
-                        Email = user.Email
+                        Email = user.Email,
+                        Message = $"User {user.Id} was deleted successfully"
                     });
                 }
                 catch (Exception pubEx)
@@ -194,6 +197,7 @@ namespace WDC_F24.infrastructure.Repositories
                         Id = addUser.Id,
                         Username = addUser.UserName,
                         Email = addUser.Email,
+                        Message = $"User {addUser.Id} was created successfully"
                     });
                 }
                 catch (Exception pubEx)
@@ -284,7 +288,8 @@ namespace WDC_F24.infrastructure.Repositories
                     {
                         Id = Getuser.Id,
                         Username = Getuser.UserName,
-                        Email = Getuser.Email
+                        Email = Getuser.Email,
+                        Message = $"User {Getuser.Id} was updated successfully"
                     });
                 }
                 catch (Exception pubEx)
