@@ -2,10 +2,6 @@
 using WDC_F24.infrastructure;
 using WDC_F24.infrastructure.Data;
 using WDC_F24.infrastructure.Repositories;
-using WDC_F24.Application;
-using Microsoft.Extensions.Options;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.OpenApi.Models;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -13,8 +9,6 @@ using WDC_F24.infrastructure.interfaces;
 using Microsoft.AspNetCore.Identity;
 using WDC_F24.Domain.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using System.Configuration;
-using System.Reflection;
 using System.Security.Claims;
 using Serilog;
 
@@ -35,7 +29,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Host.UseSerilog();
-builder.Services.AddEndpointsApiExplorer();
+
 
 
 builder.Services.AddSwaggerGen(options =>
@@ -77,49 +71,52 @@ builder.Services.AddSwaggerGen(options =>
     });
 
 });
-
-builder.Services.AddAuthentication("Bearer")
-    
-    .AddJwtBearer("Bearer", options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-
-            ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
-            ValidAudience = builder.Configuration["JwtSettings:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Key"])),
-            RoleClaimType = ClaimTypes.Role,
-            NameClaimType = ClaimTypes.Name,
-            
-
-        };
-
-      
-
-
-    });
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddScoped<IJwtService, JwtService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddIdentity<User, IdentityRole<Guid>>(options =>
-    {
-        options.Password.RequireNonAlphanumeric = false;
-        options.Password.RequireUppercase = false;
-        options.Password.RequireDigit = false;
-    })
+{
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireDigit = false;
+})
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
 
-builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddAuthorization();
-builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
+        ValidAudience = builder.Configuration["JwtSettings:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Key"])),
+        RoleClaimType = ClaimTypes.Role,
+        NameClaimType = ClaimTypes.Name
+    };
+});
 
 
-builder.Services.AddScoped<IJwtService, JwtService>();
-builder.Services.AddScoped<IUserService, UserService>();
+
+
+
+//builder.Services.AddAuthorization();
+
+
+
+
 
 
 

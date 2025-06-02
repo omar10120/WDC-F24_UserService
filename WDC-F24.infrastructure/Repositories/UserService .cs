@@ -1,28 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 using WDC_F24.infrastructure.Data;
-using WDC_F24.Application;
+
 using WDC_F24.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using WDC_F24.Application.Interfaces;
 using WDC_F24.Application.DTOs.Responses;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using WDC_F24.Application.DTOs.Requests;
-using Microsoft.IdentityModel.Tokens;
-using System.Security.Policy;
 using Microsoft.AspNetCore.Identity;
 using WDC_F24.infrastructure.interfaces;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
-using Microsoft.AspNetCore.Identity.Data;
 using System.Data;
 
-using System.Reflection;
-using System.Runtime.Serialization;
 using WDC_F24.Domain.Consts;
-using Microsoft.AspNetCore.Connections;
+
 
 
 namespace WDC_F24.infrastructure.Repositories

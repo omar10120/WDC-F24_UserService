@@ -1,17 +1,13 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 using WDC_F24.Application.DTOs.Requests;
-using WDC_F24.Application.DTOs.Responses;
 using WDC_F24.Application.Interfaces;
 using WDC_F24.Domain.Entities;
 using WDC_F24.infrastructure.interfaces;
-using WDC_F24.infrastructure.Repositories;
 using WDC_F24.UtilityServices;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+
 
 [ApiController]
 [Route("[controller]")]
@@ -33,7 +29,7 @@ public class UsersController : ControllerBase
         _httpContextAccessor = httpContextAccessor;
         _jwtService = jwtService;
     }
-    
+    [Authorize]
     [HttpGet("Profiles")]
     public async Task<IActionResult> Get()
     {
@@ -52,7 +48,7 @@ public class UsersController : ControllerBase
 
     }
 
-
+    
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(Guid id)
     {
@@ -70,7 +66,7 @@ public class UsersController : ControllerBase
         }
 
     }
-
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(Guid id)
     {
@@ -106,7 +102,7 @@ public class UsersController : ControllerBase
         }
 
     }
-
+    
     [HttpPost("Login")]
     public async Task<IActionResult> login([FromBody] LoginRequestDto login)
     {
@@ -124,6 +120,7 @@ public class UsersController : ControllerBase
         }
 
     }
+    [Authorize]
     [HttpPatch("Update")]
     public async Task<IActionResult> Update(Guid id,UpdateRequestDto user )
     {
